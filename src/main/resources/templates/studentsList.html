@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang= "pl" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: head">
+    <title>Lista studentów</title>
+</head>
+<body>
+
+    <div th:include="layout :: navigationPanel"></div>
+
+    <h1>Lista studentów:</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Średnia</th>
+                <th>Czynność</th>
+            </tr>
+        </thead>
+        <tbody id="studentsTableBody">
+        </tbody>
+    </table>
+
+    <div th:include="layout :: footer"></div>
+
+    <script>
+
+        async function fetchData(endpoint, httpMethod, data = null) {
+            const url = "http://localhost:8081";
+            if (data != null) {
+                return await fetch(url + endpoint, {
+                    method: httpMethod, // GET, POST, DELETE, PUT, ...
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            } else {
+                return await fetch(url + endpoint, {
+                    method: httpMethod, // GET, POST, DELETE, PUT, ...
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+        }
+
+        function reloadPage() {
+            window.location.reload();
+        }
+
+        async function editRow(event) {
+            const id = event.getAttribute('data-id');
+            const url = "http://localhost:8081";
+            const endpoint = `/editStudentPage/${id}`;
+            window.location.href = url + endpoint;
+        }
+
+        async function deleteRow(event) {
+            const id = event.getAttribute('data-id');
+            await fetchData(`/deleteStudent/${id}`, "DELETE")
+            .then( async (response) => {
+                // const data = await response.json();
+                // console.log(data);
+                // reloadPage();
+                setTimeout(reloadPage, 3000);
+            })
+            .catch( (error) => {
+                console.log(error);
+            });
+        }
+
+        function addRow(tableBody, data, index) {
+            let row = document.createElement("tr");
+            row.innerHTML =
+                `<tr id="${data[index].id}">` +
+                `  <td> ${data[index].id} </td>` +
+                `  <td> ${data[index].name} </td>` +
+                `  <td> ${data[index].surname} </td>` +
+                `  <td> ${data[index].average} </td>` +
+                `  <td>` +
+                `    <button type="button" data-id="${data[index].id}" onclick="editRow(this)">Edytuj</button>` +
+                `    <button type="button" data-id="${data[index].id}" onclick="deleteRow(this)">Usuń</button>` +
+                `  </td>` +
+                `</tr>`;
+            tableBody.append(row);
+        }
+
+        function displayStudentsTable(tableBody, data) {
+            if ( data.length !== 0 ) {
+                for (let i = 0; i < data.length; i++) {
+                    addRow(tableBody, data, i);
+                }
+            } else {
+                let div = document.createElement("div");
+                div.innerText = "No students added yet.";
+                tableBody.append(div);
+            }
+        }
+
+        const studentsTableBody = document.getElementById("studentsTableBody");
+        let students = [];
+        // console.log(students);
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await fetchData("/students", "GET")
+            .then( async (response) => {
+                const data = await response.json();
+                // console.log(data);
+                students = data;
+                // console.log(students);
+                displayStudentsTable(studentsTableBody, students);
+            })
+            .catch( (error) => {
+                console.log(error);
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="head">
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1"/>
+  <title>Laboratorium 7</title>
+  <style>
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid;
+    }
+
+    th, td {
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+
+<div th:fragment="navigationPanel">
+  <ul class="nav">
+    <li>
+      <a th:href="@{/addStudentPage}">Dodaj studenta</a>
+    </li>
+    <li>
+      <a th:href="@{/}">Wyświetl studentów</a>
+    </li>
+  </ul>
+</div>
+
+<div th:fragment="footer">
+  <footer class="footer"><hr/>
+    <p>Zygmunt Łata, Laboratorium 7. Spring Boot i REST API</p>
+  </footer>
+</div>
+
+</body>
+</html>
