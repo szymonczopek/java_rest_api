@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html> <head>
+    <title> Front end do REST API </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="skrypt.js"></script>
+</head>
+<body>
+<form id="student-form">
+    Id: <label>
+    <input type="number" name="id">
+</label><br>
+    Name: <label>
+    <input type="text" name="name">
+</label><br>
+    Surname: <label>
+    <input type="text" name="surName">
+</label><br>
+    Average: <label>
+    <input type="number" name="average">
+</label><br>
+    <input type="button" value="Dodaj studenta" onclick="addStudent()">
+    <input type="button" value="Modyfikuj studenta" onclick="modifyStudent()">
+    <input type="button" value="Usun studenta" onclick="deleteStudent()">
+</form>
+<div>
+    <h2>Lista studentów:</h2>
+    <div id="main"> </div>
+    <div id="komunikat"></div>
+
+</div>
+</body>
+</html>
